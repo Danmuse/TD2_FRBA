@@ -1,0 +1,3 @@
+../Core/Src/activeobject.c:14:6:ActiveObject_start	24	static
+../Core/Src/activeobject.c:22:6:ActiveObject_send_event	16	static
+../Core/Src/activeobject.c:32:9:ActiveObject_get_event	24	static

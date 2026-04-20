@@ -1,0 +1,2 @@
+../Core/Src/utils.c:19:6:cpu_irq_enter_critical	16	static,ignoring_inline_asm
+../Core/Src/utils.c:37:6:cpu_irq_leave_critical	8	static,ignoring_inline_asm

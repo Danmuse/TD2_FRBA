@@ -1,0 +1,4 @@
+../Core/Src/application.c:29:22:Application_initial	1
+../Core/Src/application.c:34:22:Application_idle	2
+../Core/Src/application.c:44:22:Application_active	5
+../Core/Src/application.c:71:6:Application_constructor	2

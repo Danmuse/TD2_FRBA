@@ -1,0 +1,5 @@
+../Core/Src/eventqueue.c:16:6:EventQueue_constructor	24	static
+../Core/Src/eventqueue.c:29:6:EventQueue_enqueue	16	static
+../Core/Src/eventqueue.c:53:8:EventQueue_dequeue	24	static
+../Core/Src/eventqueue.c:74:8:EventQueue_is_empty	16	static
+../Core/Src/eventqueue.c:80:8:EventQueue_is_full	16	static

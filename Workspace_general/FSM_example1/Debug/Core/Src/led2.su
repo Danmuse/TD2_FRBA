@@ -1,0 +1,5 @@
+../Core/Src/led2.c:31:22:Led2_initial	16	static
+../Core/Src/led2.c:36:22:Led2_off	16	static
+../Core/Src/led2.c:50:22:Led2_blinking_off	16	static
+../Core/Src/led2.c:67:22:Led2_blinking_on	16	static
+../Core/Src/led2.c:84:6:Led2_constructor	16	static

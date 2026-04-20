@@ -1,0 +1,4 @@
+../Core/Src/application.c:29:22:Application_initial	16	static
+../Core/Src/application.c:34:22:Application_idle	16	static
+../Core/Src/application.c:44:22:Application_active	16	static
+../Core/Src/application.c:71:6:Application_constructor	16	static

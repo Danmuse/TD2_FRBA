@@ -1,0 +1,3 @@
+../Core/Src/statemachine.c:10:6:StateMachine_constructor	16	static
+../Core/Src/statemachine.c:15:6:StateMachine_init	16	static
+../Core/Src/statemachine.c:21:6:StateMachine_dispatch	24	static
