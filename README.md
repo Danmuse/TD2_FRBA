@@ -1,31 +1,41 @@
-# 🚀 Embedded Systems & Mono-Stage Amplifiers (UTN-FRBA)
+# Digital Techniques II - Embedded Systems Lab 🚀
 
-Welcome to this repository dedicated to the design, simulation, and low-level control of electronic systems. This project integrates **Assembly (ASM) software development**.
+Welcome to the **Digital Techniques II** repository. This project serves as a comprehensive collection of firmware developments, ranging from low-level hardware abstraction to advanced Real-Time Operating Systems (RTOS) integration.
 
-## 🛠️ Required Hardware
-
-To run and test the programs in this repository, you will need the following development platforms:
-
-* **Primary Board:** [STM32F446RET6 (WeAct Studio)](https://github.com/WeActStudio/WeActStudio.STM32F446RET6) – Based on ARM Cortex-M4. It is used for the majority of processing routines and optimization algorithms.
-* **Specific Board:** [STM32F103C8T6 (Blue Pill)](https://www.st.com/en/microcontrollers-microprocessors/stm32f103c8.html) – Used for legacy or specific modules identified in the code headers.
+The repository is designed to demonstrate proficiency in ARM Cortex-M architecture, focusing on modularity, efficiency, and industrial-standard programming patterns.
 
 ---
 
-## 📂 Repository Content
+## 🛠️ Hardware Requirements
 
-### 💾 Assembly Software (ARM Cortex-M)
-Highly optimized routines following the **AAPCS** (Procedure Call Standard), focusing on cycle efficiency and memory management:
-* **Vector Arithmetic:** 32-bit vector summation using post-indexed addressing modes.
-* **Lightweight Cryptography:** *Xorshift* algorithm for pseudo-random number generation.
-* **Bit Manipulation:** Efficient rotations (ROR/LSL) and logic operations utilizing the `S` suffix for flow control via **NZCV flags**.
-* **Standardized Documentation:** All files include detailed comments on register usage (R0-R15) and status flag states (EQ, NE, etc.).
+To run the programs in this repository, you will primarily need the following development boards:
+
+### 1. Primary Board: **STM32F446RET6 (WeAct Studio)**
+Most of the advanced projects, high-speed processing, and RTOS implementations are targeted for this powerful **Cortex-M4** core.
+* **Core:** ARM® 32-bit Cortex®-M4 CPU with FPU.
+* **Clock:** Up to 180 MHz.
+
+### 2. Secondary Board: **STM32F103C8T6 (Blue Pill)**
+Specific legacy modules or low-power consumption exercises utilize the classic **Cortex-M3** "Blue Pill".
+* *Note: Please check the individual source headers to confirm if a project is targeted for the F103 series.*
 
 ---
 
-## 🚀 Quick Start Guide
+## 🧠 Core Methodologies
 
-1.  [cite_start]**Analog Simulation:** Before hardware assembly, verify the Quiescent point ($Q$), gain, and maximum symmetric excursion in LTspice[cite: 33, 34, 37, 40].
-2.  **Software Deployment:**
-    * Connect your **STM32F446RET6** using an ST-Link programmer.
-    * Compile using the `arm-none-eabi-gcc` toolchain.
-    * For **STM32F103** specific modules, check the individual file headers for compatibility notes.
+The firmware architecture revolves around three fundamental pillars:
+
+### ⚙️ Finite State Machines (FSM)
+We implement robust **Mealy and Moore FSMs** to handle complex system logic. This ensures deterministic behavior and simplifies the debugging of asynchronous events in embedded environments.
+
+### ⏱️ FreeRTOS Integration
+For multi-tasking applications, we leverage **FreeRTOS**. 
+- Preemptive scheduling.
+- Task synchronization using Semaphores, Mutexes, and Queues.
+- Memory management and efficient resource allocation.
+
+### 🏗️ Assembly (ASM)
+To understand the underlying architecture and optimize critical code paths, several modules are written in **ARM Assembly**.
+- Inline Assembly and standalone `.s` files.
+- Optimization of mathematical operations.
+- Deep dive into the NVIC and Exception handling.
