@@ -1,0 +1,5 @@
+../Core/Src/main.c:61:6:xorshift	1
+../Core/Src/main.c:76:5:main	1
+../Core/Src/main.c:145:6:SystemClock_Config	4
+../Core/Src/main.c:199:13:MX_GPIO_Init	1
+../Core/Src/main.c:241:6:Error_Handler	1
