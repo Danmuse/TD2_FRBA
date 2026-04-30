@@ -98,12 +98,12 @@ int main(void)
     /* USER CODE BEGIN 3 */
     static uint32_t lastTicks_LED = 0;
 
-	currentTicks = HAL_GetTick();
-	if (currentTicks - lastTicks_LED >= 1000) {
-	  lastTicks_LED = currentTicks;
-	  if (!HAL_GPIO_ReadPin(BTN_BOARD_GPIO_Port, BTN_BOARD_Pin))
-        HAL_GPIO_TogglePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin);
-	}
+	  currentTicks = HAL_GetTick();
+	  if (currentTicks - lastTicks_LED >= 1000) {
+	    lastTicks_LED = currentTicks;
+	    if (!HAL_GPIO_ReadPin(BTN_BOARD_GPIO_Port, BTN_BOARD_Pin))
+          HAL_GPIO_TogglePin(LED_BLINK_GPIO_Port, LED_BLINK_Pin);
+	  }
   }
   /* USER CODE END 3 */
 }
