@@ -1546,11 +1546,11 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim2);
  8000c06:	4825      	ldr	r0, [pc, #148]	@ (8000c9c <main+0xf0>)
  8000c08:	f001 fcb0 	bl	800256c <HAL_TIM_Base_Start_IT>
-  while (1)
-  {
-    /* USER CODE END WHILE */
+	// - There are two LEDs that blink with different configurations.
+	// - When switch 1 is pressed, both LEDs blink every 500 ms.
+	// - Switch 2 can be pressed to turn LED 2 on/off and alter the blinking pattern of both LEDs.
+	// - When switch 1 is pressed again, both LEDs turn off until switch 1 is pressed again.
 
-    /* USER CODE BEGIN 3 */
 	if ((e = ActiveObject_get_event(AOled1)) != SIG_NONE) {
  8000c0c:	4b1d      	ldr	r3, [pc, #116]	@ (8000c84 <main+0xd8>)
  8000c0e:	681b      	ldr	r3, [r3, #0]

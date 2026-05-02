@@ -118,6 +118,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	// - There are two LEDs that blink with different configurations.
+	// - When switch 1 is pressed, both LEDs blink every 500 ms.
+	// - Switch 2 can be pressed to turn LED 2 on/off and alter the blinking pattern of both LEDs.
+	// - When switch 1 is pressed again, both LEDs turn off until switch 1 is pressed again.
+
 	if ((e = ActiveObject_get_event(AOled1)) != SIG_NONE) {
       ActiveObject_dispatch(AOled1, e);
 	}
