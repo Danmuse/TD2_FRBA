@@ -54,6 +54,9 @@ extern uint32_t snd_exam_crc32_asm(uint8_t * datos, uint32_t len);
 extern void trd_exam_simple_pole_asm(int32_t *x, int32_t *y, uint32_t len, uint32_t k);
 extern uint32_t fth_exam_one_at_a_time_hash_asm(uint8_t * datos, uint32_t len);
 extern uint32_t fif_exam_get_aplitude_asm(int32_t * signal, uint32_t len);
+extern uint16_t six_exam_checksum_asm(uint16_t * datos, uint32_t len);
+extern void signal_limiter(int32_t *p, uint32_t len, int32_t threshold);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -132,6 +135,18 @@ int main(void)
 	int32_t values_fif[] = {28, 421, 763, 983, 1023, 866, 607, 216, -199, -574, -855, -970, -933, -732, -392, 13};
 	ret = fif_exam_get_aplitude_asm(values_fif, sizeof(values_fif) / sizeof(values_fif[0]));
 	ret++; // Implemented for use with a Breakpoint
+
+	// ---------- SIXTH EXAM ----------
+	uint16_t datos[] = {0x4500, 0x003C, 0x0A1C, 0x4000, 0xFF06, 0x0000, 0xA8B0, 0x0319, 0xA8B0, 0x036C};
+	ret = (uint32_t)six_exam_checksum_asm(datos, sizeof(datos) / sizeof(datos[0]));
+	ret++; // Implemented for use with a Breakpoint
+
+	// ---------- SIGNAL LIMITER ----------
+    int32_t p[] = {100, -500, 1200, -1500, 300};
+    int32_t threshold = 1000;
+
+    signal_limiter(p, sizeof(p) / sizeof(p[0]), threshold);
+    ret++;
 
     UNUSED(ret);
     /* USER CODE BEGIN 3 */
