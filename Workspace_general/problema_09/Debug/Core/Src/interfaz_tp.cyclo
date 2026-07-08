@@ -1,0 +1,3 @@
+../Core/Src/interfaz_tp.c:3:6:setear_led	6
+../Core/Src/interfaz_tp.c:15:6:invertir_led	6
+../Core/Src/interfaz_tp.c:27:5:pulsador_activo	5

@@ -1,0 +1,9 @@
+../Core/Src/main.c:74:6:tarea_led_pulsador	24	static
+../Core/Src/main.c:84:6:tarea_control	24	static
+../Core/Src/main.c:123:5:main	24	static
+../Core/Src/main.c:225:6:SystemClock_Config	88	static
+../Core/Src/main.c:273:13:MX_USART2_UART_Init	8	static
+../Core/Src/main.c:306:13:MX_GPIO_Init	48	static
+../Core/Src/main.c:367:6:StartDefaultTask	16	static
+../Core/Src/main.c:386:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:404:6:Error_Handler	4	static,ignoring_inline_asm
