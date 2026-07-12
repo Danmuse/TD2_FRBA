@@ -106,7 +106,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 		xQueueSendFromISR(colaRx, &dato_rx, &llamarplanificador);
 
 		// Rearme por registros para evitar fallos de HAL_BUSY
-		SET_BIT(huart->Instance->CR1, USART_CR1_RXNEIE);
+		//SET_BIT(huart->Instance->CR1, USART_CR1_RXNEIE);
+		HAL_UART_Receive_IT(huart, &dato_rx, sizeof(dato_rx));
 
 		portEND_SWITCHING_ISR(llamarplanificador);
 	}
@@ -151,7 +152,7 @@ void serial_receive_task(void *p) {
 		*/
 
 		// Si no es el fin de línea, acumulamos
-		if (dato != '\n') {
+		if (dato != '\r') {
 			if (indice < (LONG_MAX_LINEA - 1)) {
 				buffer_linea[indice++] = dato;
 			}
@@ -185,14 +186,14 @@ void serial_receive_task(void *p) {
 					// Acción sobre el hardware
 					setear_led(n_led, estado);
 
-					enviar_string_a_cola("OK\n");
+					enviar_string_a_cola("OK\r\n");
 				} else {
-					enviar_string_a_cola("ERROR\n");
+					enviar_string_a_cola("ERROR\r\n");
 				}
 			}
 			else {
 				// No mide 7 caracteres o no empieza con "LED " o no tiene los espacios fijos
-				enviar_string_a_cola("ERROR\n");
+				enviar_string_a_cola("ERROR\r\n");
 			}
 
 			// Reset del buffer para la próxima trama

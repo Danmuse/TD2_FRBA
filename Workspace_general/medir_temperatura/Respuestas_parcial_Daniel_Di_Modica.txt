@@ -1,0 +1,28 @@
+1 - Determinar la cantidad de tareas necesarias para implementar el sistema y justificar brevemente la función de cada una.
+
+En el programa definí las siguientes tres tareas:
+- "tarea_muestreo" para controlar la base de tiempo del sistema, que según el enunciado, la idea es realizar la conversión del ADC (HAL_ADC_Start_IT) de forma periódica cada un segundo. Además, reemplacé la instrucción "HAL_GetTick()" por "vTaskDelayUntil()" para eliminar la pérdida de los ciclos de reloj del CPU. Considero que es una mejora para lograr un manejo eficiente del programa.
+- "tarea_procesamiento" permanece bloqueada hasta que el hardware termina la conversión. Al momento de ejecutarse se leen los registros del ADC, aplicando la ecuación matemática de conversión a temperatura provista por el enunciado, y se formatea el texto de salida que será enviado al puerto serie.
+- "tarea_tx_serial" se encarga de controlar la USART2 y prepara los datos en la cola de transmisión, sin riesgo de que los mensajes se pisen.
+
+2 - Indicar qué mecanismos de sincronización y comunicación utilizará entre las tareas y las interrupciones. Justificar la elección realizada.
+
+Utilicé la instrucción primitiva de FreeRTOS "vTaskDelayUntil()", que a diferencia de un "vTaskDelay()", no introduce derivas temporales que se acumulan por el tiempo de ejecución de la propia tarea. De esta manera, asegure un periodo de muestreo de un segundo exacto.
+De la ISR del ADC a "tarea_procesamiento" utilicé una Notificación de Tarea para evitar el uso de flags globales y desbloquea al micro sin la sobrecarga computacional que implicaría un semáforo binario tradicional.
+De la "tarea_procesamiento" a "tarea_tx_serial" utilicé una Cola de Mensajes FIFO (xQueueCreate) para almacenar datos los caracteres del mensaje a enviar.
+De la "tarea_tx_serial" a la ISR de la UART utilicé el flag de estado "enviando_uart" que opera en conjunto con el Callback de transmisión "HAL_UART_TxCpltCallback" para encadenar los caracteres de forma asrincrónica y no bloqueante por registros del hardware
+
+3 - Realizar un diagrama de bloques donde se indiquen:
+- Las tareas, [1]
+- Las interrupciones, [2]
+- Los mecanismos de comunicación utilizados entre ellas. [3]
+
+vTaskDelayUntil[3] -> tarea_muestreo[1] -> Dispara Conversión por Hardware[3] -> Finaliza la conversión[3] -> Genera interrupción, HAL_ADC_ConvCpltCallback[2] -> tarea_procesamiento[1] -> Cargar caracteres del mensaje para enviar por UART[3] -> tarea_tx_serial[1] -> Iniciar transmisión de UART[3] -> Genera la interrupción para enviar datos por serie, HAL_UART_TxCpltCallback[2] -> xQueueReceiveFromISR[3]
+
+xQueueReceiveFromISR -> Quedan bytes por enviar?
+SI: Vuelve a ejecutar HAL_UART_Transmit_IT
+NO: Coloca el flag "enviando_uart" en 0
+
+Periódicamente, cada un segundo repetirá el proceso.
+
+Nota: Para verificar la salida mediante el puerto serie, he utilizado la interfaz "Terminal v1.93b" en Windows 11.
