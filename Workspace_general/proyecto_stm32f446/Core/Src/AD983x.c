@@ -100,9 +100,9 @@ static inline void * AD9833_GetSpiHandle(const AD983x_Handle_t * ad983xHandle)
 /*------------------------------------------------------------------------------------------------------
  | @brief Write GPIO pin state using STM32 HAL.
  -------------------------------------------------------------------------------------------------------*/
-static void AD9833_GpioWritePinState(const AD983x_Handle_t * ad983xHandle, uint16_t gpioPinNumber, GPIO_PinState gpioPinState)
+static void AD9833_GpioWritePinState(GPIO_TypeDef *gpioPort, uint16_t gpioPinNumber, GPIO_PinState gpioPinState)
 {
-    HAL_GPIO_WritePin(ad983xHandle->gpioPort, gpioPinNumber, gpioPinState);
+    HAL_GPIO_WritePin(gpioPort, gpioPinNumber, gpioPinState);
 }
 
 /*------------------------------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ static void AD983x_DelayShort(void)
  -------------------------------------------------------------------------------------------------------*/
 static void AD9833_AssertFrameSync(const AD983x_Handle_t * ad983xHandle)
 {
-    AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->frameSyncGpioPin, GPIO_PIN_RESET);
+    AD9833_GpioWritePinState(ad983xHandle->frameSyncGpioPort, ad983xHandle->frameSyncGpioPin, GPIO_PIN_RESET);
     AD983x_DelayShort();
 }
 
@@ -130,7 +130,7 @@ static void AD9833_AssertFrameSync(const AD983x_Handle_t * ad983xHandle)
 static void AD9833_DeassertFrameSync(const AD983x_Handle_t * ad983xHandle)
 {
     AD983x_DelayShort();
-    AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->frameSyncGpioPin, GPIO_PIN_SET);
+    AD9833_GpioWritePinState(ad983xHandle->frameSyncGpioPort, ad983xHandle->frameSyncGpioPin, GPIO_PIN_SET);
     AD983x_DelayShort();
 }
 
@@ -168,23 +168,23 @@ static AD983x_Status_t AD9833_WriteSerialWord16(const AD983x_Handle_t * ad983xHa
         {
             if ((serialWordShiftRegister & (uint16_t)AD9833_WORD_MSB_MASK) != 0u)
             {
-                AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->serialDataGpioPin, GPIO_PIN_SET);
+                AD9833_GpioWritePinState(ad983xHandle->serialDataGpioPort, ad983xHandle->serialDataGpioPin, GPIO_PIN_SET);
             }
             else
             {
-                AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->serialDataGpioPin, GPIO_PIN_RESET);
+                AD9833_GpioWritePinState(ad983xHandle->serialDataGpioPort, ad983xHandle->serialDataGpioPin, GPIO_PIN_RESET);
             }
 
             AD983x_DelayShort();
 
-            AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->serialClockGpioPin, GPIO_PIN_RESET);
+            AD9833_GpioWritePinState(ad983xHandle->serialClockGpioPort, ad983xHandle->serialClockGpioPin, GPIO_PIN_RESET);
             AD983x_DelayShort();
-            AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->serialClockGpioPin, GPIO_PIN_SET);
+            AD9833_GpioWritePinState(ad983xHandle->serialClockGpioPort, ad983xHandle->serialClockGpioPin, GPIO_PIN_SET);
 
             serialWordShiftRegister = (uint16_t)((uint32_t)serialWordShiftRegister << 1u);
         }
 
-        AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->serialDataGpioPin, GPIO_PIN_RESET);
+        AD9833_GpioWritePinState(ad983xHandle->serialDataGpioPort, ad983xHandle->serialDataGpioPin, GPIO_PIN_RESET);
     }
 
     return driverStatus;
@@ -193,7 +193,8 @@ static AD983x_Status_t AD9833_WriteSerialWord16(const AD983x_Handle_t * ad983xHa
 /*------------------------------------------------------------------------------------------------------
  | @brief Check the driver handle and the basic configuration fields.
  -------------------------------------------------------------------------------------------------------*/
-static AD983x_Status_t AD9833_ValidateDriverHandle(const AD983x_Handle_t * ad983xHandle)
+static AD983x_Status_t AD9833_ValidateDriverHandle(
+    const AD983x_Handle_t *ad983xHandle)
 {
     AD983x_Status_t driverStatus = AD983X_STATUS_OK;
 
@@ -201,15 +202,24 @@ static AD983x_Status_t AD9833_ValidateDriverHandle(const AD983x_Handle_t * ad983
     {
         driverStatus = AD983X_STATUS_ERROR_NULL;
     }
-    else if (ad983xHandle->gpioPort == NULL)
+    else if ((ad983xHandle->serialDataGpioPort == NULL) ||
+             (ad983xHandle->serialClockGpioPort == NULL) ||
+             (ad983xHandle->frameSyncGpioPort == NULL))
     {
         driverStatus = AD983X_STATUS_ERROR_NULL;
+    }
+    else if ((ad983xHandle->serialDataGpioPin == 0u) ||
+             (ad983xHandle->serialClockGpioPin == 0u) ||
+             (ad983xHandle->frameSyncGpioPin == 0u))
+    {
+        driverStatus = AD983X_STATUS_ERROR_PARAM;
     }
     else if (ad983xHandle->masterClockFrequencyHz == 0u)
     {
         driverStatus = AD983X_STATUS_ERROR_PARAM;
     }
-    else if ((uint32_t)ad983xHandle->deviceType > (uint32_t)AD983X_DEVICE_AD9834)
+    else if ((uint32_t)ad983xHandle->deviceType >
+             (uint32_t)AD983X_DEVICE_AD9834)
     {
         driverStatus = AD983X_STATUS_ERROR_PARAM;
     }
@@ -423,12 +433,12 @@ AD983x_Status_t AD983x_Init(AD983x_Handle_t * ad983xHandle, AD983x_Waveform_t wa
 
     if (driverStatus == AD983X_STATUS_OK)
     {
-        AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->frameSyncGpioPin, GPIO_PIN_SET);
+        AD9833_GpioWritePinState(ad983xHandle->frameSyncGpioPort, ad983xHandle->frameSyncGpioPin, GPIO_PIN_SET);
 
         if (AD9833_GetSpiHandle(ad983xHandle) == NULL)
         {
-            AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->serialDataGpioPin, GPIO_PIN_RESET);
-            AD9833_GpioWritePinState(ad983xHandle, ad983xHandle->serialClockGpioPin, GPIO_PIN_SET);
+            AD9833_GpioWritePinState(ad983xHandle->serialDataGpioPort, ad983xHandle->serialDataGpioPin, GPIO_PIN_RESET);
+            AD9833_GpioWritePinState(ad983xHandle->serialClockGpioPort, ad983xHandle->serialClockGpioPin, GPIO_PIN_SET);
         }
 
         ad983xHandle->currentWaveformType = AD983X_WAVE_SINE;

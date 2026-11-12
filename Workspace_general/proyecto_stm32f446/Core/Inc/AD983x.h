@@ -117,7 +117,10 @@ typedef enum
  -------------------------------------------------------------------------------------------------------*/
 typedef struct
 {
-    GPIO_TypeDef         * gpioPort;                       /* GPIO port used for all AD983x signals */
+    GPIO_TypeDef *serialDataGpioPort;
+    GPIO_TypeDef *serialClockGpioPort;
+    GPIO_TypeDef *frameSyncGpioPort;
+
     uint16_t               serialDataGpioPin;              /* SDATA pin number */
     uint16_t               serialClockGpioPin;             /* SCLK pin number */
     uint16_t               frameSyncGpioPin;               /* FSYNC (chip select) pin number */
