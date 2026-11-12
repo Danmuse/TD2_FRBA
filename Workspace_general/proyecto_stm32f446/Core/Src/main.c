@@ -446,13 +446,19 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, EN_FSTCAP_Pin|EN_SNDCAP_Pin|EN_TRDCAP_Pin|EN_FTHCAP_Pin
-                          |RS_TFT_Pin|DC_TFT_Pin|CS_TOUCH_Pin, GPIO_PIN_RESET);
+                          |DC_TFT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LED_STATUS_Pin|LED_TFT_AUX_Pin|CFG_DCDC_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, EN_OPAMP_Pin|EN_AMP_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(CS_TFT_GPIO_Port, CS_TFT_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, RST_TFT_Pin|CS_TOUCH_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin : SW_ENC_Pin */
   GPIO_InitStruct.Pin = SW_ENC_Pin;
@@ -467,9 +473,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : EN_FSTCAP_Pin EN_SNDCAP_Pin EN_TRDCAP_Pin EN_FTHCAP_Pin
-                           RS_TFT_Pin DC_TFT_Pin CS_TOUCH_Pin */
+                           RST_TFT_Pin DC_TFT_Pin CS_TOUCH_Pin */
   GPIO_InitStruct.Pin = EN_FSTCAP_Pin|EN_SNDCAP_Pin|EN_TRDCAP_Pin|EN_FTHCAP_Pin
-                          |RS_TFT_Pin|DC_TFT_Pin|CS_TOUCH_Pin;
+                          |RST_TFT_Pin|DC_TFT_Pin|CS_TOUCH_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -494,6 +500,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : CS_TFT_Pin */
+  GPIO_InitStruct.Pin = CS_TFT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  HAL_GPIO_Init(CS_TFT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : TMP_ALERT_Pin */
   GPIO_InitStruct.Pin = TMP_ALERT_Pin;

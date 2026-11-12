@@ -85,8 +85,10 @@ void Error_Handler(void);
 #define DSCK_GPIO_Port GPIOB
 #define EN_AMP_Pin GPIO_PIN_10
 #define EN_AMP_GPIO_Port GPIOB
-#define RS_TFT_Pin GPIO_PIN_6
-#define RS_TFT_GPIO_Port GPIOC
+#define CS_TFT_Pin GPIO_PIN_12
+#define CS_TFT_GPIO_Port GPIOB
+#define RST_TFT_Pin GPIO_PIN_6
+#define RST_TFT_GPIO_Port GPIOC
 #define DC_TFT_Pin GPIO_PIN_7
 #define DC_TFT_GPIO_Port GPIOC
 #define CS_TOUCH_Pin GPIO_PIN_8
